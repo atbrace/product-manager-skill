@@ -140,7 +140,8 @@ When the user invokes /pm or asks what to work on:
 - Check recent git log for what was worked on last
 
 **Step 2: Assess and rank.** For each open issue, evaluate:
-- **Priority label** (P0 > P1 > P2 > P3). If unlabeled, assign one now.
+- **Alignment with project goals** — Use the project context (CLAUDE.md, README, SPEC) to understand what the project is trying to achieve. Issues that advance the project's stated goals or current milestone rank higher, regardless of label.
+- **Priority label** (P0 > P1 > P2 > P3). If unlabeled, assign one now. If a label conflicts with project goals (e.g., a P3 issue is central to the current milestone), flag the discrepancy and recommend re-labeling.
 - **Dependencies** between issues (does fixing X unblock Y?)
 - **Effort estimate** (small: <30min, medium: 30min-2hr, large: >2hr). You may glance at relevant source files to calibrate effort, but do not start fixing anything.
 - **Impact** on user experience
@@ -173,3 +174,5 @@ Group related issues that can be fixed together. Lead with the highest-impact wo
 | "No need to check issues, user told me what to do" | Always check GitHub for full context. |
 | "I'll skip the low-priority ones in the list" | Show ALL open issues. User decides what to defer. |
 | "This issue doesn't need an effort estimate" | Every issue gets priority + effort + impact assessment. |
+| "The most recent commit tells me what to prioritize" | Git recency shows momentum, not priority. Use project goals. |
+| "Labels already capture the right priority" | Labels can go stale. Validate against current project goals. |
