@@ -13,7 +13,7 @@
       "name": "product-manager",
       "source": "./plugins/product-manager",
       "description": "GitHub issue management and session planning. File bugs/features/enhancements as issues, then triage and plan work sessions from your backlog.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "productivity",
       "keywords": ["github", "issues", "triage", "planning", "backlog", "project-management"]
     }
