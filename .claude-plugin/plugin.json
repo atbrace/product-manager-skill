@@ -1,0 +1,8 @@
+{
+  "name": "product-manager",
+  "description": "GitHub issue management and session planning for Claude Code. File bugs, features, and enhancements as issues, then triage and plan work sessions from your backlog.",
+  "author": {
+    "name": "Austin Brace",
+    "url": "https://github.com/austinbrace"
+  }
+}
