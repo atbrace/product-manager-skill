@@ -1,0 +1,21 @@
+{
+  "name": "product-manager-skill",
+  "owner": {
+    "name": "Austin Brace",
+    "url": "https://github.com/atbrace"
+  },
+  "metadata": {
+    "description": "GitHub issue management and session planning for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "product-manager",
+      "source": "./plugins/product-manager",
+      "description": "GitHub issue management and session planning. File bugs/features/enhancements as issues, then triage and plan work sessions from your backlog.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": ["github", "issues", "triage", "planning", "backlog", "project-management"]
+    }
+  ]
+}

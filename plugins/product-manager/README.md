@@ -21,13 +21,9 @@ Issues are labeled with priority (`P0`–`P3`) and type (`bug`, `feature`, `enha
 
 ## Install
 
-In Claude Code, run:
-
 ```
-/plugin marketplace add atbrace/product-manager-skill
+claude plugin add austinbrace/product-manager-skill
 ```
-
-Then enable the `product-manager` plugin when prompted.
 
 ## Usage
 
