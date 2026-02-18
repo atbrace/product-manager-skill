@@ -35,6 +35,31 @@ Before creating labels, run `gh label list` to check what already exists. Reuse 
 Detect the repo from `git remote get-url origin`. Parse owner/repo for `gh` commands.
 If not a git repo or no GitHub remote, tell the user and stop.
 
+## Project Context Discovery
+
+Project context helps assess priority and write better issues. Use this lookup strategy to find it efficiently.
+
+**Step 1: Check cache.** Read `.claude/product-manager.local.md`. If it exists and has a `project_docs` field in its YAML frontmatter, read only those files. Skip to done.
+
+**Step 2: First-run discovery.** If the cache file doesn't exist, check these files in order (root of repo only — do not recurse):
+1. `CLAUDE.md` — already in context, no read needed. Use if it has a codebase overview.
+2. `README.md` — read only the first 100 lines. Use if it describes what the project does.
+3. `SPEC.md` — read if it exists.
+
+Stop as soon as you have enough context to understand what the project does and assess severity. Do not search further.
+
+**Step 3: Cache the result.** Write `.claude/product-manager.local.md` with the paths that were useful:
+
+```yaml
+---
+project_docs:
+  - CLAUDE.md
+  - README.md
+---
+```
+
+On subsequent invocations, the cache is read in Step 1 and no discovery is needed.
+
 ---
 
 ## INTAKE MODE
@@ -55,7 +80,7 @@ When the user reports a problem, feature idea, or any work item:
 - polish: visual or UX refinement
 - perf: performance optimization
 
-**Step 2: Read project context.** Check for project documentation (README.md, SPEC.md, docs/, or similar) and relevant source code. Use domain context to assess severity. Assign a priority:
+**Step 2: Read project context.** Follow the Project Context Discovery steps above. Use that context to assess severity. Assign a priority:
 - P0: Blocks all progress or causes data loss
 - P1: Significantly impacts core functionality, should fix soon
 - P2: Noticeable but workaround exists, or non-core feature
@@ -111,7 +136,7 @@ When the user invokes /pm or asks what to work on:
 
 **Step 1: Gather context.**
 - Run `gh issue list --state open --json number,title,labels,body,createdAt` to get all open issues
-- Read project documentation (README.md, SPEC.md, docs/, or similar) for domain context
+- Follow the Project Context Discovery steps above for domain context
 - Check recent git log for what was worked on last
 
 **Step 2: Assess and rank.** For each open issue, evaluate:
