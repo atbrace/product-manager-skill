@@ -39,16 +39,18 @@ If not a git repo or no GitHub remote, tell the user and stop.
 
 Project context helps assess priority and write better issues. Use this lookup strategy to find it efficiently.
 
-**Step 1: Check cache.** Read `.claude/product-manager.local.md`. If it exists and has a `project_docs` field in its YAML frontmatter, read only those files. Skip to done.
+**Step 0: Determine config directory.** Check which tool you're running in. Use the first directory that exists: `.claude/`, `.kiro/`, or fall back to `.claude/`. The cache file is `<config-dir>/product-manager.local.md`.
+
+**Step 1: Check cache.** Read the cache file. If it exists and has a `project_docs` field in its YAML frontmatter, read only those files. Skip to done.
 
 **Step 2: First-run discovery.** If the cache file doesn't exist, check these files in order (root of repo only — do not recurse):
-1. `CLAUDE.md` — already in context, no read needed. Use if it has a codebase overview.
+1. `CLAUDE.md` or `KIRO.md` — whichever matches the tool. Already in context, no read needed. Use if it has a codebase overview.
 2. `README.md` — read only the first 100 lines. Use if it describes what the project does.
 3. `SPEC.md` — read if it exists.
 
 Stop as soon as you have enough context to understand what the project does and assess severity. Do not search further.
 
-**Step 3: Cache the result.** Write `.claude/product-manager.local.md` with the paths that were useful:
+**Step 3: Cache the result.** Write the cache file with the paths that were useful:
 
 ```yaml
 ---
