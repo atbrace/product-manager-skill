@@ -134,21 +134,28 @@ These thoughts mean STOP - you are about to violate the intake boundary:
 
 ## TRIAGE MODE
 
-When the user invokes /pm or asks what to work on:
+When the user invokes /pm or asks what to work on, delegate all research to a subagent to keep the main context clean for implementation work.
 
-**Step 1: Gather context.**
-- Run `gh issue list --state open --json number,title,labels,body,createdAt` to get all open issues
-- Follow the Project Context Discovery steps above for domain context
-- Check recent git log for what was worked on last
+**Step 1: Spawn a triage subagent.** Use the Task tool with `subagent_type: "general-purpose"` and the following prompt:
 
-**Step 2: Assess and rank.** For each open issue, evaluate:
-- **Alignment with project goals** — Use the project context (CLAUDE.md, README, SPEC) to understand what the project is trying to achieve. Issues that advance the project's stated goals or current milestone rank higher, regardless of label.
-- **Priority label** (P0 > P1 > P2 > P3). If unlabeled, assign one now. If a label conflicts with project goals (e.g., a P3 issue is central to the current milestone), flag the discrepancy and recommend re-labeling.
-- **Dependencies** between issues (does fixing X unblock Y?)
-- **Effort estimate** (small: <30min, medium: 30min-2hr, large: >2hr). You may glance at relevant source files to calibrate effort, but do not start fixing anything.
-- **Impact** on user experience
+~~~
+You are a product management triage agent. Your job is to analyze open GitHub issues, assess project context, and return a ranked session plan with reasoning.
 
-**Step 3: Recommend a session plan.** Present in this format:
+## Instructions
+
+1. **Gather context:**
+   - Run `gh issue list --state open --json number,title,labels,body,createdAt` to get all open issues.
+   - Follow the Project Context Discovery steps: check for a cache file at `<config-dir>/product-manager.local.md` (where config-dir is `.claude/` or `.kiro/`, whichever exists). If cached, read only those docs. Otherwise discover from CLAUDE.md/KIRO.md, README.md (first 100 lines), and SPEC.md at repo root. Cache the result.
+   - Run `git log --oneline -10` to see recent work.
+
+2. **Assess and rank** each open issue by:
+   - **Alignment with project goals** — Use the project context to understand what the project is trying to achieve. Issues that advance stated goals or current milestones rank higher, regardless of label.
+   - **Priority label** (P0 > P1 > P2 > P3). If unlabeled, assign one. If a label conflicts with project goals (e.g., a P3 issue is central to the current milestone), flag the discrepancy and recommend re-labeling.
+   - **Dependencies** between issues (does fixing X unblock Y?)
+   - **Effort estimate** (small: <30min, medium: 30min-2hr, large: >2hr). You may glance at relevant source files to calibrate effort, but do not start fixing anything.
+   - **Impact** on user experience.
+
+3. **Return your output in exactly this format** (no extra commentary):
 
 ```
 Recommended session plan:
@@ -160,13 +167,19 @@ Recommended session plan:
 Deferring to a future session:
 - #N - Title (priority, type, effort)
   Reason: ...
+
+Triage reasoning:
+[2-3 sentences explaining the overall prioritization strategy for this session — what project goals drove the ranking, any label discrepancies found, and why the top items were chosen over alternatives.]
 ```
 
 Group related issues that can be fixed together. Lead with the highest-impact work.
+~~~
 
-**Step 4: Ask for approval.** Wait for the user to approve, reorder, or adjust the plan. Do NOT start working until the user confirms.
+**Step 2: Present the plan.** When the subagent returns, show its output to the user. Do not add, remove, or reorder items — present the subagent's plan as-is.
 
-**Step 5: Transition to implementation.** Once approved, begin implementation planning for the first issue in the plan. For non-trivial work, use EnterPlanMode to design the approach before coding. For small fixes, proceed directly. Always reference the GitHub issue number in commits.
+**Step 3: Ask for approval.** Wait for the user to approve, reorder, or adjust the plan. Do NOT start working until the user confirms.
+
+**Step 4: Transition to implementation.** Once approved, begin implementation planning for the first issue in the plan. For non-trivial work, use EnterPlanMode to design the approach before coding. For small fixes, proceed directly. Always reference the GitHub issue number in commits.
 
 ### Triage Red Flags
 
@@ -178,3 +191,4 @@ Group related issues that can be fixed together. Lead with the highest-impact wo
 | "This issue doesn't need an effort estimate" | Every issue gets priority + effort + impact assessment. |
 | "The most recent commit tells me what to prioritize" | Git recency shows momentum, not priority. Use project goals. |
 | "Labels already capture the right priority" | Labels can go stale. Validate against current project goals. |
+| "I'll do the triage research in the main context" | Always use the subagent. Keep main context clean. |
