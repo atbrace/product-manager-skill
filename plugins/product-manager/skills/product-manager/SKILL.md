@@ -179,7 +179,28 @@ Group related issues that can be fixed together. Lead with the highest-impact wo
 
 **Step 3: Ask for approval.** Wait for the user to approve, reorder, or adjust the plan. Do NOT start working until the user confirms.
 
-**Step 4: Transition to implementation.** Once approved, begin implementation planning for the first issue in the plan. For non-trivial work, use EnterPlanMode to design the approach before coding. For small fixes, proceed directly. Always reference the GitHub issue number in commits.
+**Step 4: Recommend an execution strategy.** After the user approves the issue list, analyze the approved work and recommend one of these approaches:
+
+1. **Parallel execution** — Most issues are small, independent, and well-specified. Batch into subagents.
+2. **Sequential implementation** — Issues are small but have dependencies (fix A unblocks fix B), or there are only 1-2 issues. Do them in order.
+3. **Plan first** — Session includes a medium/large feature or architectural change where the approach isn't obvious. Use EnterPlanMode before coding.
+4. **Mixed** — Session has both simple fixes and complex work. Batch the small independent fixes in parallel, then plan the complex work separately.
+
+To decide, evaluate:
+- **Effort estimates** from triage (small → parallel/sequential; medium/large → plan first)
+- **Issue types** (bug fixes with clear scope → parallel; open-ended features → plan)
+- **Dependencies** between approved issues (dependent issues can't be parallelized)
+- **Count** (1-2 issues rarely need parallelization)
+
+Present the recommendation conversationally with a brief rationale. Examples:
+
+> This session is 6 small independent bug fixes and 1 medium determinism fix. I recommend **parallel execution** — batching the small fixes into subagents, then handling #158 sequentially since it touches 7 files. Want to proceed this way?
+
+> This session has a P1 bug fix (small) and a new feature (#64, large). I recommend fixing the bug first, then using **plan first** to design the feature implementation. Sound good?
+
+Wait for the user to confirm or override (e.g., "actually just do them sequentially, I want to review each one" or "skip the plan, I know what I want"). Do NOT start working until the user confirms the strategy.
+
+**Step 5: Execute.** Proceed with the confirmed strategy. Always reference the GitHub issue number in commits.
 
 ### Triage Red Flags
 
