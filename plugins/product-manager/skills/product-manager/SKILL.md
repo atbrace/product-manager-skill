@@ -39,12 +39,12 @@ If not a git repo or no GitHub remote, tell the user and stop.
 
 Project context helps assess priority and write better issues. Use this lookup strategy to find it efficiently.
 
-**Step 0: Determine config directory.** Check which tool you're running in. Use the first directory that exists: `.claude/`, `.kiro/`, or fall back to `.claude/`. The cache file is `<config-dir>/product-manager.local.md`.
+The cache file is `.claude/product-manager.local.md`.
 
 **Step 1: Check cache.** Read the cache file. If it exists and has a `project_docs` field in its YAML frontmatter, read only those files. Skip to done.
 
 **Step 2: First-run discovery.** If the cache file doesn't exist, check these files in order (root of repo only — do not recurse):
-1. `CLAUDE.md` or `KIRO.md` — whichever matches the tool. Already in context, no read needed. Use if it has a codebase overview.
+1. `CLAUDE.md` — already in context, no read needed. Use if it has a codebase overview.
 2. `README.md` — read only the first 100 lines. Use if it describes what the project does.
 3. `SPEC.md` — read if it exists.
 
@@ -145,7 +145,7 @@ You are a product management triage agent. Your job is to analyze open GitHub is
 
 1. **Gather context:**
    - Run `gh issue list --state open --json number,title,labels,body,createdAt` to get all open issues.
-   - Follow the Project Context Discovery steps: check for a cache file at `<config-dir>/product-manager.local.md` (where config-dir is `.claude/` or `.kiro/`, whichever exists). If cached, read only those docs. Otherwise discover from CLAUDE.md/KIRO.md, README.md (first 100 lines), and SPEC.md at repo root. Cache the result.
+   - Follow the Project Context Discovery steps: check for a cache file at `.claude/product-manager.local.md`. If cached, read only those docs. Otherwise discover from CLAUDE.md, README.md (first 100 lines), and SPEC.md at repo root. Cache the result.
    - Run `git log --oneline -10` to see recent work.
 
 2. **Assess and rank** each open issue by:
